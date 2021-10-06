@@ -1,0 +1,282 @@
+---
+title: "r_workshop"
+author: "Jane Weinstock"
+date: "10/5/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# copied over from R_workshop RMarkdown for DAY 2 coding
+
+```
+
+# DAY 1
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+```{r packages}
+library(ggplot2)
+library(dplyr)
+#install.packages("gapminder")
+library(gapminder)
+```
+
+## R as a calculator
+
+```{r math}
+log(10)
+log(exp(1))
+log10(10)
+```
+
+## Comparing things
+
+```{r}
+1 == 1 #are they equal
+1 != 1 #are they not equal
+1 >= 1
+```
+
+## Variables
+
+- cannot START with numbers, but can include them
+- etc. (see examples below)
+
+```{r}
+min_height = 5 # good
+max.height = 6 # good
+#_age = 27 # bad
+.mass = 3.14 # sort of good, hidden by default
+MaxLength = 24 # good
+#min-lengths # badbadbad
+#2widths # bad
+celcius2kelvin = 14 # good
+```
+
+## Getting help
+
+```{r}
+#vignette("dplyr")
+
+dat <- 1:4
+#data[1] --> "Error in data[1] : object of type 'closure' is not subsettable"
+  # 'closure' in R = function
+```
+
+## Dataframes w/ Ari
+
+```{r}
+cats <- data.frame(coat = c("calico","black","tabby"),
+                   weight = c(2.1,5.0,3.2),
+                   likes_string = c(1,0,1))
+write.csv(cats, file = "data/cats_data.csv", row.names = F)
+
+```
+
+```{r}
+cats <- read.csv("data/cats_data.csv", stringsAsFactors = T)
+cats$weight
+
+paste("My cat is", cats$coat)
+```
+
+## Data types
+
+- double (numeric)
+- integer
+- complex
+- logical
+- character
+
+```{r}
+typeof(1+1i)
+
+typeof(1L)
+
+sapply(cats, class)
+```
+
+## Vectors
+
+```{r}
+c("string", 3)
+c("string",TRUE)
+```
+
+```{r}
+cats2 <- data.frame(coat = c("calico", "black", "tabby", "white"),
+                    weight = c(2.1, 5, 3, "2.1 or 3.4"),
+                    likes_string = c(0,0,0,1))
+write.csv(cats2, file = "data/cats_data2",
+          row.names = F)
+```
+
+```{r}
+#cats2$weight + 2
+as.logical(cats$likes_string)
+
+```
+
+```{r}
+seq(-1, 10, by = 0.5)
+seq(1,10, length.out = 20)
+```
+
+```{r}
+sequence_example <- c(1:10)
+
+head(sequence_example, n=2)
+tail(sequence_example, n=2)
+length(sequence_example)
+class(sequence_example)
+```
+
+```{r}
+example_vect <- c(5:8)
+names(example_vect) <- c("a","b","c","d")
+example_vect
+```
+
+```{r}
+str(cats$coat)
+
+names(cats)[2]
+
+```
+
+```{r}
+list_example <- list(1, "a", FALSE, 1+4i)
+sapply(list_example,class)
+```
+
+
+```{r}
+list_example2 <- list(title = "Numbers",
+                     numbers = 1:10)
+sapply(list_example2,class)
+list_example2
+```
+
+
+# DAY 2
+
+Data downloaded from <https://raw.githubusercontent.com/swcarpentry/r-novice-gapminder/gh-pages/_episodes_rmd/data/gapminder_data.csv>
+
+```{r}
+gapminder <- read.csv("data/gapminder_data.csv",header=T)
+
+SE_Asia <- c("Myanmar","Thailand","Cambodia","Vietnam","Laos")
+
+countries <- unique(gapminder$country)
+
+is.SE_Asia <- countries == "Myanmar" | 
+  countries == "Thailand" | 
+  countries == "Cambodia" | 
+  countries == "Vietnam" | 
+  countries == "Laos"
+
+is.SE_Asia_v2 <- countries %in% SE_Asia
+
+identical(is.SE_Asia, is.SE_Asia_v2)
+
+SEA_gapminder <- gapminder[gapminder$country %in% SE_Asia,]
+
+```
+
+## Conditionals - if/then 
+
+if (expression that returns TRUE or FALSE) {
+  what to do if exp is TRUE
+  else {
+  what to do if exp is FALSE
+}}
+
+Important lesson: if statements are one of the few in R NOT vectorized
+
+
+```{r}
+x <- 8
+
+if(x > 10){
+  "Yay!"
+  } else {
+  "Alas"
+}
+
+if(x > 10){
+  "Yay!"
+  } else if (x > 5 & x < 10) {
+  "Alas"
+  } else {
+  "Low number"
+}
+
+```
+
+
+```{r}
+
+test <- gapminder$year == 2002 # gives warning
+
+test2 <- gapminder[gapminder$year == 2002,]
+
+test3 <- length(test2) > 0
+
+test4 <- any(test)
+
+if (test4){
+  "2002!"
+}
+
+any(test)
+all(test)
+
+any(gapminder$year == 2012)
+
+```
+
+## for loops
+
+```{r}
+x <- 1:10
+
+out <- integer(length(x))
+out
+for (i in x){
+  sum <- i + 1
+  out[i] <- sum
+}
+out
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
