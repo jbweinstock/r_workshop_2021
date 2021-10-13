@@ -264,16 +264,104 @@ out
 ```
 
 
+## DAY 3
 
+```{r}
+# using gapminder data & dplyr
 
+colnames(gapminder)
+unique(gapminder$continent)
+mean(gapminder[gapminder$continent == "Asia","gdpPercap"])
 
+# select function
+year_country_gdp <- dplyr::select(gapminder, year, country, gdpPercap)
 
+# select remonve
+no_continent <- dplyr::select(gapminder, -continent)
 
+```
 
+Piping !
+```{r}
+# piping
+another_way <- gapminder %>% select(year, country, gdpPercap)
 
+```
 
+Rename
+```{r}
+head(year_country_gdp)
+year_country_gdp <- year_country_gdp %>% rename(gdp_per_cap = gdpPercap)
+head(year_country_gdp)
+```
 
+Filter !
+```{r}
+gapminder %>% filter(continent == "Europe", year == 2007) %>% 
+  select(year,country,gdpPercap)
+```
 
+Group_by !
+```{r}
+str(gapminder)
+
+gapminder %>% group_by(continent,year) %>% 
+  summarize(mean_gdp_per_cap = mean(gdpPercap),
+            sd_gdp_per_cap = sd(gdpPercap))
+```
+
+# Counting within groups
+```{r}
+gapminder %>%
+  filter(year==2002) %>%
+  count(continent, sort = TRUE)
+```
+
+Compute standard error
+```{r}
+gapminder %>%
+  group_by(continent) %>%
+  summarize(se = sd(lifeExp)/sqrt(n()))
+```
+
+# If else
+```{r}
+gapminder %>%
+  mutate(gdp_billion = ifelse(lifeExp > 25,
+                              yes = gdpPercap * pop / 10^9,
+                              no = NA)) %>%
+  group_by(continent, year) %>%
+  summarize(mean_gdp_per_cap = mean(gdpPercap),
+            mean_gdp_billions = mean(gdp_billion)) #already using new column
+
+# note: Compared to the base ifelse(), this function is more strict. It checks that true and false are the same type. This strictness makes the output type more predictable, and makes it somewhat faster.
+
+```
+
+dplyr & ggplot !
+```{r}
+Afghan_data <- gapminder %>% 
+  filter(country == "Afghanistan")
+
+ggplot(data = Afghan_data, aes(x=year, y=lifeExp)) +
+  geom_line() + theme_classic()
+
+```
+
+```{r}
+Asia_data <- gapminder %>% 
+  filter(continent == "Asia")
+
+ggplot(data = Asia_data, aes(x=year, y=lifeExp)) +
+  geom_line() + facet_wrap(~country) 
+
+```
+
+# Functions
+
+```{r}
+
+```
 
 
 
