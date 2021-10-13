@@ -408,7 +408,7 @@ fahr_to_cel <- function(temp) {
   return(cel)
 }
 
-fahr_to_cel("blue")
+#fahr_to_cel("blue")
 
 ```
 
@@ -474,18 +474,5 @@ sapply(gap_normal,class)
 
 #all.equal(gapminder,gap_normal)
 ```
-
-```{r}
-
-```
-
-
-
-
-
-
-
-
-
 
 
