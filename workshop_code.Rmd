@@ -31,6 +31,7 @@ library(ggplot2)
 library(dplyr)
 #install.packages("gapminder")
 library(gapminder)
+library(tidyverse)
 ```
 
 ## R as a calculator
@@ -264,7 +265,7 @@ out
 ```
 
 
-## DAY 3
+# DAY 3
 
 ```{r}
 # using gapminder data & dplyr
@@ -324,7 +325,7 @@ gapminder %>%
   summarize(se = sd(lifeExp)/sqrt(n()))
 ```
 
-# If else
+## If else
 ```{r}
 gapminder %>%
   mutate(gdp_billion = ifelse(lifeExp > 25,
@@ -357,7 +358,7 @@ ggplot(data = Asia_data, aes(x=year, y=lifeExp)) +
 
 ```
 
-# Functions
+## Functions
 
 ```{r}
 #name <- function(parameters){
@@ -395,7 +396,7 @@ fahr_to_cel(212)
 
 ```
 
-# Defensive programming / input validation
+## Defensive programming / input validation
 
 ```{r}
 fahr_to_cel <- function(temp) {
@@ -423,11 +424,60 @@ gap_gdp <- gapminder %>%
 
 ```
 
+## Tidy data
 
+Wide vs long
 
+```{r}
+gap_wide <- read.csv("data/gapminder_wide.csv")
 
+head(gap_wide)
 
+```
 
+```{r}
+gap_long <- gap_wide %>%
+  pivot_longer(cols=c(starts_with("pop"),
+                      starts_with("lifeExp"),
+                      starts_with("gdpPercap")),
+               names_to = "obstype_year",
+               values_to = "obs_values")
+
+head(gap_long)
+```
+
+```{r}
+gap_long <- gap_long %>%
+  separate(obstype_year, into = c('obstype', 'year'), sep = "_")
+
+head(gap_long)
+
+```
+
+```{r}
+gap_normal <- gap_long %>%
+  pivot_wider(names_from = obstype,
+              values_from = obs_values)
+
+head(gap_normal)
+```
+
+```{r}
+names(gapminder)
+names(gap_normal)
+
+gap_normal <- gap_normal %>%
+  mutate(year = as.integer(year))
+
+sapply(gapminder,class)
+sapply(gap_normal,class)
+
+#all.equal(gapminder,gap_normal)
+```
+
+```{r}
+
+```
 
 
 
